@@ -1,0 +1,59 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node 
+{
+    int info;
+    struct node *next;
+};
+struct node *head=NULL;
+void create_list(int n)
+{
+    struct node *newnode, *ptr;
+    ptr=head;
+    for(int i=1;i<=n;i++)
+    {
+        newnode = (struct node*)malloc(sizeof(struct node));
+        if(newnode->next==NULL)
+        {
+            printf("overflow!");
+        }
+        else
+        {
+            printf("enter info of newnode:");
+            scanf("%d",&newnode->info);
+            newnode->next=NULL;
+            if(head==NULL)
+            {
+                head=newnode;
+                ptr=newnode;
+            }
+            else
+            {
+                ptr->next=newnode;
+                ptr=newnode;
+            }
+        }
+    }
+    ptr->next=head;
+}
+void traverse()
+{
+    struct node *ptr;
+    ptr=head;
+    do
+    {
+        printf("%d->",ptr->info);
+        ptr=ptr->next;
+    }while(ptr!=head);
+    printf("%d",ptr->info);
+}
+int main()
+{
+    int n;
+    printf("enter number of nodes:");
+    scanf("%d",&n);
+    create_list(n);
+    printf("circular linked list:\n");
+    traverse();
+}
