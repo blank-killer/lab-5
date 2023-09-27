@@ -1,0 +1,168 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int info;
+    struct node *prev, *next;
+};
+int n;
+struct node *head=NULL;
+struct node *tail=NULL;
+void create_dll()
+{
+    struct node *newnode;
+    printf("enter the number of nodes:");
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++)
+    {
+        newnode = (struct node*)malloc(sizeof(int));
+        printf("enter info of newnode:");
+        scanf("%d",&newnode->info);
+        newnode->prev=NULL;
+        newnode->next=NULL;
+        if(head==NULL)
+        {
+            head=newnode;
+            tail=newnode;
+        }
+        else
+        {
+            tail->next=newnode;
+            newnode->prev=tail;
+            tail=newnode;
+        }
+    }
+}
+void traverse()
+{
+    struct node *ptr=head;
+    while(ptr->next!=NULL)
+    {
+        printf("%d -> ",ptr->info);
+        ptr=ptr->next;
+    }
+    printf("%d\n",ptr->info);
+}
+void insert_dll()
+{
+    int pos,i=1;
+    struct node *newnode,*ptr=head;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    printf("enter info of newnode:");
+    scanf("%d",&newnode->info);
+    newnode->next=NULL;
+    newnode->prev=NULL;
+    printf("enter position to add new node:");
+    scanf("%d",&pos);
+    if(pos==1)
+    {
+        newnode->next=head;
+        newnode->prev=NULL;
+        head=newnode;
+    }
+    else 
+    {
+        while(ptr!=NULL && i<pos-1)
+        {
+            ptr=ptr->next;
+            i++;
+        }
+        if(ptr==NULL)//after ending node
+        {
+            printf("invalid position!");
+            return;
+        }
+        else if(ptr->next==NULL)//ending node
+        {
+            ptr->next=newnode;
+            newnode->prev=ptr;
+            tail=newnode;
+        }
+        else
+        {
+            newnode->next=ptr->next;
+            newnode->prev=ptr;
+            ptr->next=newnode;
+            ptr=newnode->next;
+            ptr->prev=newnode;
+        }
+    }
+    n++;
+}
+void delete_dll()
+{
+    struct node *ptr=head, *ptr2=ptr->next;
+    printf("enter position of node to delete:");
+    int pos,i=1;
+    scanf("%d",&pos);
+    if(pos==1)
+    {
+        head=ptr->next;
+        ptr=ptr->next;
+        ptr->prev=NULL;
+    }
+    else
+    {
+        while(ptr2!=NULL && i<pos-1)
+        {
+            ptr=ptr->next;
+            ptr2=ptr->next;
+            i++;
+        }
+        if(ptr2==NULL)
+        {
+            printf("invalid position!");
+            return;
+        }
+        else if(ptr2->next==NULL)
+        {
+            ptr2=ptr2->prev;
+            tail=ptr2;
+            ptr2->next=NULL;
+        }
+        else
+        {
+            ptr2=ptr->next;
+            ptr->next=ptr2->next;
+            ptr2->next->prev=ptr;
+        }
+    }
+    n--;
+}
+int main()
+{
+    char ch,choice;
+    create_dll();
+    do
+    {
+        printf("MENU:\n1.insert a node\n2.delete a node\n3.traverse the list\nenter your choice:");
+        scanf("%d",&choice);
+        switch (choice)
+        {
+        case 1:
+            printf("the original list is:\n");
+            traverse();
+            insert_dll();
+            printf("\nafter inserting newnode:\n");
+            traverse();
+            break;
+        case 2:
+            printf("the original list is:\n");
+            traverse();
+            delete_dll();
+            printf("\nafter deleting a node:\n");
+            traverse();
+            break;
+        case 3:
+            printf("the linked list is:\n");
+            traverse();
+            break;
+        default:
+            printf("invalid input");
+            break;
+        }
+        printf("enter 1 to continue:");
+        scanf("%d",&ch);
+    } while (ch==1);
+}
