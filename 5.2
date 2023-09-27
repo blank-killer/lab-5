@@ -1,0 +1,70 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int r;
+    int c;
+    int v;
+    struct node *next;
+};
+struct node *head=NULL;
+int main()
+{
+    int row,col,nz=0;
+    struct node *newnode,*ptr=head;
+    printf("enter the number of rows and columns:\n");
+    scanf("%d%d",&row,&col);
+    int m[row][col];
+    printf("enter the matrix:\n");
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            scanf("%d",&m[i][j]);
+            if(m[i][j]!=0)
+            {
+                nz++;
+            }
+        }
+    }
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(m[i][j]!=0)
+            {
+                nz++;
+                newnode=(struct node*)malloc(sizeof(struct node));
+                newnode->r=i;
+                newnode->c=j;
+                newnode->v=m[i][j];
+                if(head==NULL)
+                {
+                    head=newnode;
+                    ptr=newnode;
+                }
+                else
+                {
+                    ptr->next=newnode;
+                    ptr=newnode;
+                }
+                newnode->next=NULL;
+            }
+        }
+    }
+    newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->next=head;
+    newnode->r=row;
+    newnode->c=col;
+    newnode->v=nz;
+    head=newnode;
+    printf("the matrix in linked list format is:");
+    ptr=head;
+    while(ptr->next!=NULL)
+    {
+        printf("%d %d %d -> ",ptr->r,ptr->c,ptr->v);
+        ptr=ptr->next;
+    }
+    printf("%d %d %d",ptr->r,ptr->c,ptr->v);
+}
